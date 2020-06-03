@@ -1,5 +1,7 @@
 ---
-- name: Add a DataStax repository file
+
+- name: Add a DataStax repository file (yum)
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
   lineinfile:
     name: "{{ dse_repo_file }}"
     create: yes
@@ -7,7 +9,28 @@
     line: "deb https://{{ dse_repo_email }}:{{ dse_repo_password }}@debian.datastax.com/enterprise stable main"
     state: present
 
-- name: Add the DataStax repository key
+
+- name: Add a DataStax repository file (debian)
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+  lineinfile:
+    name: "{{ dse_repo_file }}"
+    create: yes
+    regexp: 'debian\.datastax\.com\/enterprise'
+    line: "deb https://{{ dse_repo_email }}:{{ dse_repo_password }}@debian.datastax.com/enterprise stable main"
+    state: present
+
+- name: Add the DataStax repository key (yum)
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+  yum_repository:
+    name: datastax
+    description: DataStax Repo for DataStax Enterprise
+    baseurl: https://rpm.datastax.com/enterprise/
+    enabled: yes
+    gpgcheck: no
+    state: present
+
+- name: Add the DataStax repository key (debian)
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
   apt_key: 
     url: "https://debian.datastax.com/debian/repo_key"
     state: present

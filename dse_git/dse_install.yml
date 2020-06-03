@@ -44,7 +44,7 @@
 # Start DSE non-seed nodes 
 - hosts: dse
   any_errors_fatal: true
-  name: Start non-seed node first one by one
+  name: Start non-seed nodes one by one
   serial: 1
   become: true
   become_method: sudo

@@ -30,7 +30,7 @@
 
 
 - name: Configure DSE Graph workload type
-  when: dse_ver_major|version_compare('5.0', '>=') and graph_enabled|int == 1
+  when: "dse_ver_major is version('5.0', '>=') and graph_enabled|int == 1"
   lineinfile:
     name: "{{ dse_default_dir }}/dse"
     regexp: '^GRAPH_ENABLED='
@@ -49,6 +49,17 @@
     owner: cassandra
     group: cassandra
     mode: 0644
+
+- name: Configure Token Allocation Algorithm, if vnodes enabled
+  when: vnode|int == 1
+  lineinfile:
+    name: "{{ dse_config_dir }}/cassandra/cassandra.yaml"
+    regexp: 'allocate_tokens_for_local_replication_factor:\:'
+    line: "allocate_tokens_for_local_replication_factor: 3"
+    owner: cassandra
+    group: cassandra
+    mode: 0644
+
 
 
 - name: Configure single-token value, if VNode is NOT enabled (cassandra.yaml)
@@ -75,8 +86,8 @@
     - "{{ saved_caches_directory }}"
 
 
-- name: Create Cassandra directory for hitns (only applicable to DSE 5.0+)
-  when: dse_ver_major|version_compare('5.0', '>=') 
+- name: Create Cassandra directory for hints (only applicable to DSE 5.0+)
+  when: "dse_ver_major is version('5.0', '>=')"
   file:
     path: "{{ item }}"
     state: directory
@@ -100,15 +111,15 @@
     - { regexp: '- seeds\:', line: '          - seeds: "{{ seeds }}"' }
     - { regexp: 'endpoint_snitch\:', line: "endpoint_snitch: GossipingPropertyFileSnitch" }
     - { regexp: '^listen_address\:', line: "listen_address: {{ ansible_default_ipv4.address }}" }
-    - { regexp: '^rpc_address\:', line: "listen_address: {{ ansible_default_ipv4.address }}" }
-#    - { regexp: '^rpc_address\:', line: "rpc_address: 0.0.0.0" }
-#    - { regexp: '#*\s*broadcast_rpc_address\:', line: "broadcast_rpc_address: {{ ansible_default_ipv4.address }}" }
+    - { regexp: '^native_transport_address\:', line: "native_transport_address: {{ ansible_default_ipv4.address }}" }
+#    - { regexp: '^native_transport_address\:', line: "native_transport_address: 0.0.0.0" }
+#    - { regexp: '^native_transport_broadcast_address\:', line: "native_transport_broadcast_address: {{ ansible_default_ipv4.address }}" }
     - { regexp: '^commitlog_directory\:', line: 'commitlog_directory: {{ commitlog_directory }}' }
     - { regexp: '^saved_caches_directory\:', line: 'saved_caches_directory: {{ saved_caches_directory }}' }
 
 
 - name: Configure DSE hints_directory (cassandra.yaml), DSE 5.0+ only
-  when: dse_ver_major|version_compare('5.0', '>=') 
+  when: "dse_ver_major is version('5.0', '>=')"
   lineinfile:
     name: "{{ dse_config_dir }}/cassandra/cassandra.yaml"
     regexp: "{{ item.regexp }}"

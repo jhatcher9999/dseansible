@@ -1,10 +1,23 @@
 ---
-- name: Install DSE version 5.1.x
-  when: dse_ver_major|version_compare('5.1', '==')
-  apt:
+- name: Install libaio
+  when: "dse_ver_major is version('6.0', '>=')"
+  yum:
+    name: libaio
+    state: present
+
+- name: Install DSE version 6.8.x
+  when: "dse_ver_major is version('6.8', '==')"
+  yum:
     name: "{{ item }}"
     state: present
-    update_cache: yes
+  with_items:
+    - "dse-full"
+
+- name: Install DSE version 5.1.x
+  when: "dse_ver_major is version('5.1', '==')"
+  yum:
+    name: "{{ item }}"
+    state: present
   with_items:
     - "dse-full={{ dse_ver_target }}-1"
     - "dse={{ dse_ver_target }}-1"
@@ -18,11 +31,10 @@
     - "dse-libhadoop2-client-native={{ dse_ver_target }}-1"
 
 - name: Install DSE version 5.0.x
-  when: dse_ver_major|version_compare('5.0', '==')
-  apt:
+  when: "dse_ver_major is version('5.0', '==')"
+  yum:
     name: "{{ item }}"
     state: present
-    update_cache: yes
   with_items:
     - "dse-full={{ dse_ver_target }}-1"
     - "dse={{ dse_ver_target }}-1"
@@ -44,11 +56,10 @@
     - "dse-libhadoop2-client-native={{ dse_ver_target }}-1"
 
 - name: Install DSE version 4.8.x
-  when: dse_ver_major | version_compare('4.8', '==')
-  apt:
+  when: "dse_ver_major is version('4.8', '==')"
+  yum:
     name: "{{ item }}"
     state: present
-    update_cache: yes
   with_items:
     - "dse-full={{ dse_ver_target }}-1"
     - "dse={{ dse_ver_target }}-1"

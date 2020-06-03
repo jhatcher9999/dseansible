@@ -1,8 +1,11 @@
 ---
 - name: Start cassandra or dse service
-  service:
-    name: "{{ srvc_name }}"
-    state: restarted
+  shell: service dse restart
+#  service:
+#    name: "{{ srvc_name }}"
+#    state: restarted
+  become: true
+  become_user: root
 
 - name: Wait for Cassandra process is up and running
   wait_for:
