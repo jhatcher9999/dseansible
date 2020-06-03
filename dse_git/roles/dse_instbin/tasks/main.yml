@@ -1,79 +1,86 @@
 ---
-- name: Install libaio
-  when: "dse_ver_major is version('6.0', '>=')"
+- name: Install libaio (yum)
+  when: "(ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux') and dse_ver_major is version('6.0', '>=')"
   yum:
     name: libaio
     state: present
 
-- name: Install DSE version 6.8.x
-  when: "dse_ver_major is version('6.8', '==')"
-  yum:
-    name: "{{ item }}"
+- name: Install libaio (apt)
+  when: "(ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and dse_ver_major is version('6.0', '>=')"
+  apt:
+    name: libaio
     state: present
-  with_items:
-    - "dse-full"
 
-- name: Install DSE version 5.1.x
-  when: "dse_ver_major is version('5.1', '==')"
+- name: Install DSE version 6.8.x (yum)
+  when: "(ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux') and dse_ver_major is version('6.8', '==')"
   yum:
-    name: "{{ item }}"
+    name: ['dse-full']
     state: present
-  with_items:
-    - "dse-full={{ dse_ver_target }}-1"
-    - "dse={{ dse_ver_target }}-1"
-    - "dse-libgraph={{ dse_ver_target }}-1"
-    - "dse-libsolr={{ dse_ver_target }}-1"
-    - "dse-libtomcat={{ dse_ver_target }}-1"
-    - "dse-liblog4j={{ dse_ver_target }}-1"
-    - "dse-libcassandra={{ dse_ver_target }}-1"
-    - "dse-libspark={{ dse_ver_target }}-1"
-    - "dse-libhadoop2-client={{ dse_ver_target }}-1"
-    - "dse-libhadoop2-client-native={{ dse_ver_target }}-1"
 
-- name: Install DSE version 5.0.x
-  when: "dse_ver_major is version('5.0', '==')"
-  yum:
-    name: "{{ item }}"
+- name: Install DSE version 6.8.x (apt)
+  when: "(ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and dse_ver_major is version('6.8', '==')"
+  apt:
+    name: ['dse-full']
     state: present
-  with_items:
-    - "dse-full={{ dse_ver_target }}-1"
-    - "dse={{ dse_ver_target }}-1"
-    - "dse-libgraph={{ dse_ver_target }}-1"
-    - "dse-hive={{ dse_ver_target }}-1"
-    - "dse-libhive={{ dse_ver_target }}-1"
-    - "dse-pig={{ dse_ver_target }}-1"
-    - "dse-libpig={{ dse_ver_target }}-1"
-    - "dse-libsolr={{ dse_ver_target }}-1"
-    - "dse-libtomcat={{ dse_ver_target }}-1"
-    - "dse-libsqoop={{ dse_ver_target }}-1"
-    - "dse-liblog4j={{ dse_ver_target }}-1"
-    - "dse-libmahout={{ dse_ver_target }}-1"
-    - "dse-libcassandra={{ dse_ver_target }}-1"
-    - "dse-libspark={{ dse_ver_target }}-1"
-    - "dse-libhadoop={{ dse_ver_target }}-1"
-    - "dse-libhadoop-native={{ dse_ver_target }}-1"
-    - "dse-libhadoop2-client={{ dse_ver_target }}-1"
-    - "dse-libhadoop2-client-native={{ dse_ver_target }}-1"
 
-- name: Install DSE version 4.8.x
-  when: "dse_ver_major is version('4.8', '==')"
+- name: Install DSE version 5.1.x (yum)
+  when: "(ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux') and dse_ver_major is version('5.1', '==')"
   yum:
-    name: "{{ item }}"
+    name: ['dse-full={{ dse_ver_target }}-1', 'dse={{ dse_ver_target }}-1', 'dse-libgraph={{ dse_ver_target 
+}}-1', 'dse-libsolr={{ dse_ver_target }}-1', 'dse-libtomcat={{ dse_ver_target }}-1', 'dse-liblog4j={{ dse_ver_target }}-1', 'dse-libcassandra={{ 
+dse_ver_target }}-1', 'dse-libspark={{ dse_ver_target }}-1', 'dse-libhadoop2-client={{ dse_ver_target }}-1', 'dse-libhadoop2-client-native={{ 
+dse_ver_target }}-1']
     state: present
-  with_items:
-    - "dse-full={{ dse_ver_target }}-1"
-    - "dse={{ dse_ver_target }}-1"
-    - "dse-demos={{ dse_ver_target }}-1"
-    - "dse-hive={{ dse_ver_target }}-1"
-    - "dse-libhive={{ dse_ver_target }}-1"
-    - "dse-pig={{ dse_ver_target }}-1"
-    - "dse-libpig={{ dse_ver_target }}-1"
-    - "dse-libsolr={{ dse_ver_target }}-1"
-    - "dse-libtomcat={{ dse_ver_target }}-1"
-    - "dse-libsqoop={{ dse_ver_target }}-1"
-    - "dse-liblog4j={{ dse_ver_target }}-1"
-    - "dse-libmahout={{ dse_ver_target }}-1"
-    - "dse-libcassandra={{ dse_ver_target }}-1"
-    - "dse-libspark={{ dse_ver_target }}-1"
-    - "dse-libhadoop={{ dse_ver_target }}-1"
-    - "dse-libhadoop-native={{ dse_ver_target }}-1"
+  
+- name: Install DSE version 5.1.x (apt)
+  when: "(ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and dse_ver_major is version('5.1', '==')"
+  apt:
+    name: ['dse-full={{ dse_ver_target }}-1', 'dse={{ dse_ver_target }}-1', 'dse-libgraph={{ dse_ver_target 
+}}-1', 'dse-libsolr={{ dse_ver_target }}-1', 'dse-libtomcat={{ dse_ver_target }}-1', 'dse-liblog4j={{ dse_ver_target }}-1', 'dse-libcassandra={{ 
+dse_ver_target }}-1', 'dse-libspark={{ dse_ver_target }}-1', 'dse-libhadoop2-client={{ dse_ver_target }}-1', 'dse-libhadoop2-client-native={{ 
+dse_ver_target }}-1']  
+    state: present
+
+- name: Install DSE version 5.0.x (yum)
+  when: "(ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux') and dse_ver_major is version('5.0', '==')"
+  yum:
+    name: ['dse-full={{ dse_ver_target }}-1', 'dse={{ dse_ver_target }}-1', 'dse-libgraph={{ dse_ver_target 
+}}-1', 'dse-hive={{ dse_ver_target }}-1', 'dse-libhive={{ dse_ver_target }}-1', 'dse-pig={{ dse_ver_target }}-1', 'dse-libpig={{ dse_ver_target }}-1', 
+'dse-libsolr={{ dse_ver_target }}-1', 'dse-libtomcat={{ dse_ver_target }}-1', 'dse-libsqoop={{ dse_ver_target }}-1', 'dse-liblog4j={{ dse_ver_target 
+}}-1', 'dse-libmahout={{ dse_ver_target }}-1', 'dse-libcassandra={{ dse_ver_target }}-1', 'dse-libspark={{ dse_ver_target }}-1', 'dse-libhadoop={{ 
+dse_ver_target }}-1', 'dse-libhadoop-native={{ dse_ver_target }}-1', 'dse-libhadoop2-client={{ dse_ver_target }}-1', 'dse-libhadoop2-client-native={{ 
+dse_ver_target }}-1']
+    state: present
+
+- name: Install DSE version 5.0.x (apt)
+  when: "(ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and dse_ver_major is version('5.0', '==')"
+  apt:
+    name: ['dse-full={{ dse_ver_target }}-1', 'dse={{ dse_ver_target }}-1', 'dse-libgraph={{ dse_ver_target 
+}}-1', 'dse-hive={{ dse_ver_target }}-1', 'dse-libhive={{ dse_ver_target }}-1', 'dse-pig={{ dse_ver_target }}-1', 'dse-libpig={{ dse_ver_target }}-1',
+'dse-libsolr={{ dse_ver_target }}-1', 'dse-libtomcat={{ dse_ver_target }}-1', 'dse-libsqoop={{ dse_ver_target }}-1', 'dse-liblog4j={{ dse_ver_target 
+}}-1', 'dse-libmahout={{ dse_ver_target }}-1', 'dse-libcassandra={{ dse_ver_target }}-1', 'dse-libspark={{ dse_ver_target }}-1', 'dse-libhadoop={{ 
+dse_ver_target }}-1', 'dse-libhadoop-native={{ dse_ver_target }}-1', 'dse-libhadoop2-client={{ dse_ver_target }}-1', 'dse-libhadoop2-client-native={{ 
+dse_ver_target }}-1']
+    state: present
+
+
+- name: Install DSE version 4.8.x (yum)
+  when: "(ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux') and dse_ver_major is version('4.8', '==')"
+  yum:
+    name: ['dse-full={{ dse_ver_target }}-1', 'dse={{ dse_ver_target }}-1', 'dse-demos={{ dse_ver_target }}-1', 
+'dse-hive={{ dse_ver_target }}-1', 'dse-libhive={{ dse_ver_target }}-1', 'dse-pig={{ dse_ver_target }}-1', 'dse-libpig={{ dse_ver_target }}-1', 'dse-
+libsolr={{ dse_ver_target }}-1', 'dse-libtomcat={{ dse_ver_target }}-1', 'dse-libsqoop={{ dse_ver_target }}-1', 'dse-liblog4j={{ dse_ver_target }}-1', 
+'dse-libmahout={{ dse_ver_target }}-1', 'dse-libcassandra={{ dse_ver_target }}-1', 'dse-libspark={{ dse_ver_target }}-1', 'dse-libhadoop={{ dse_ver_target
+ }}-1', 'dse-libhadoop-native={{ dse_ver_target }}-1']
+    state: present
+
+- name: Install DSE version 4.8.x (apt)
+  when: "(ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and dse_ver_major is version('4.8', '==')"
+  apt:
+    name: ['dse-full={{ dse_ver_target }}-1', 'dse={{ dse_ver_target }}-1', 'dse-demos={{ dse_ver_target }}-1',      
+'dse-hive={{ dse_ver_target }}-1', 'dse-libhive={{ dse_ver_target }}-1', 'dse-pig={{ dse_ver_target }}-1', 'dse-libpig={{ dse_ver_target }}-1', 'dse-
+libsolr={{ dse_ver_target }}-1', 'dse-libtomcat={{ dse_ver_target }}-1', 'dse-libsqoop={{ dse_ver_target }}-1', 'dse-liblog4j={{ dse_ver_target }}-1',
+'dse-libmahout={{ dse_ver_target }}-1', 'dse-libcassandra={{ dse_ver_target }}-1', 'dse-libspark={{ dse_ver_target }}-1', 'dse-libhadoop={{ dse_ver_target
+ }}-1', 'dse-libhadoop-native={{ dse_ver_target }}-1']
+    state: present
+
